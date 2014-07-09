@@ -25,6 +25,17 @@ class App < Sinatra::Application
   end
 
   post "/register/" do
+    if params[:password] == "" && params[:username] == ""
+      flash[:login_fail] = "Please enter a username and password."
+      redirect "/register/"
+    elsif params[:password] == ""
+      flash[:login_fail] = "Please enter a password."
+      redirect "/register/"
+    elsif params[:username] == ""
+      flash[:login_fail] = "Please enter a username."
+      redirect "/register/"
+    end
+
     @database_connection.sql("INSERT INTO users (username, password) VALUES ('#{params[:username]}', '#{params[:password]}')")
     flash[:register_notice] = "Thank you for registering"
     redirect "/"

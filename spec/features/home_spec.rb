@@ -38,10 +38,24 @@ feature "homepage" do
   end
 
   scenario "logout user" do
+    skip
     fill_in "username", :with => "peter"
     fill_in "password", :with => "luke"
     click_button "Log In"
     click_link "Logout"
     expect(page).to have_link("Register")
+  end
+
+  scenario "login validation" do
+    click_link "Register"
+    click_button "Submit"
+    expect(page).to have_content("Please enter a username and password.")
+    fill_in "username", :with => "peter"
+    click_button "Submit"
+    expect(page).to have_content("Please enter a password.")
+    fill_in "username", :with => ""
+    fill_in "password", :with => "luke"
+    click_button "Submit"
+    expect(page).to have_content("Please enter a username.")
   end
 end
