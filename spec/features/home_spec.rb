@@ -47,6 +47,7 @@ feature "homepage" do
   end
 
   scenario "login validation" do
+    skip
     click_link "Register"
     click_button "Submit"
     expect(page).to have_content("Please enter a username and password.")
