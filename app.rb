@@ -13,7 +13,11 @@ class App < Sinatra::Application
   end
 
   get "/" do
-    erb :root, :layout => :main_layout
+    if session[:user_id]
+      @username = @database_connection.sql("SELECT username FROM users WHERE id=#{session[:user_id]};").first["username"]
+    end
+
+    erb :root, :locals => {:username => @username}, :layout => :main_layout
   end
 
   get "/register/" do
@@ -23,6 +27,19 @@ class App < Sinatra::Application
   post "/register/" do
     @database_connection.sql("INSERT INTO users (username, password) VALUES ('#{params[:username]}', '#{params[:password]}')")
     flash[:register_notice] = "Thank you for registering"
+    redirect "/"
+  end
+
+  post "/login/" do
+    user_hashes_arr = @database_connection.sql("select * from users;")
+    user_hash = user_hashes_arr.detect do |hash|
+      params[:username] == hash["username"] && params[:password] == hash["password"]
+    end
+
+    if user_hash
+      session[:user_id] = user_hash["id"]
+    end
+
     redirect "/"
   end
 end
