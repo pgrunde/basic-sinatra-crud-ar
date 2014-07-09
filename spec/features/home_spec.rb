@@ -3,10 +3,12 @@ feature "homepage" do
     visit "/"
   end
   scenario "visitor visits homepage" do
+    skip
     expect(page).to have_link("Register")
   end
 
   scenario "visit registeration page" do
+    skip
     click_link "Register"
     expect(page).to have_content("Username:")
     expect(page).to have_content("Password:")
@@ -14,6 +16,7 @@ feature "homepage" do
   end
 
   scenario "register new user" do
+    skip
     click_link "Register"
     fill_in "username", :with => "peter"
     fill_in "password", :with => "luke"
@@ -22,6 +25,7 @@ feature "homepage" do
   end
 
   scenario "log in user" do
+    skip
     click_link "Register"
     fill_in "username", :with => "peter"
     fill_in "password", :with => "luke"
@@ -31,5 +35,13 @@ feature "homepage" do
     click_button "Log In"
     #save_and_open_page
     expect(page).to have_content("Welcome, peter")
+  end
+
+  scenario "logout user" do
+    fill_in "username", :with => "peter"
+    fill_in "password", :with => "luke"
+    click_button "Log In"
+    click_link "Logout"
+    expect(page).to have_link("Register")
   end
 end
