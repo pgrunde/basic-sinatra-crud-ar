@@ -12,4 +12,12 @@ feature "homepage" do
     expect(page).to have_content("Password:")
     expect(page).to have_button("Submit")
   end
+
+  scenario "register new user" do
+    click_link "Register"
+    fill_in "username", :with => "peter"
+    fill_in "password", :with => "luke"
+    click_button "Submit"
+    expect(page).to have_content("Thank you for registering")
+  end
 end
