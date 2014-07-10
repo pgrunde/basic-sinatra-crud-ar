@@ -21,8 +21,12 @@ class App < Sinatra::Application
     erb :root, :locals => {:username => @username, :user_arr => @user_arr}, :layout => :main_layout
   end
 
-  get "/register/" do
+  get "/register/" d  o
     erb :register, :layout => :main_layout
+  end
+
+  get "/sort/" do
+    redirect "/"
   end
 
   post "/register/" do

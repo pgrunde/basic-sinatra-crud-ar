@@ -17,6 +17,11 @@
 <% else %>
 
 <p>Welcome, <%= username %></p>
+
+<form action="/sort/" method="get">
+  <button type="submit">Sort</button>
+</form>
+
 <ul style="list-style-type: none">
 <% user_arr.each do |str| %>
   <li><%= str %></li>
