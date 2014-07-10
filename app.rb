@@ -16,17 +16,17 @@ class App < Sinatra::Application
     if session[:user_id]
       @username = @database_connection.sql("SELECT username FROM users WHERE id=#{session[:user_id]};").first["username"]
       @user_arr = @database_connection.sql("SELECT username FROM users;").map {|hash| hash["username"] if hash["username"] != @username}
+      @user_arr.delete(nil)
+    end
+    if params[:sort]
+      @user_arr.sort!
     end
 
     erb :root, :locals => {:username => @username, :user_arr => @user_arr}, :layout => :main_layout
   end
 
-  get "/register/" d  o
+  get "/register/" do
     erb :register, :layout => :main_layout
-  end
-
-  get "/sort/" do
-    redirect "/"
   end
 
   post "/register/" do
