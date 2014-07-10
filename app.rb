@@ -15,7 +15,7 @@ class App < Sinatra::Application
   get "/" do
     if session[:user_id]
       @username = @database_connection.sql("SELECT username FROM users WHERE id=#{session[:user_id]};").first["username"]
-      @user_arr = @database_connection.sql("SELECT username FROM users;").map {|hash| hash["username"]}
+      @user_arr = @database_connection.sql("SELECT username FROM users;").map {|hash| hash["username"] if hash["username"] != @username}
     end
 
     erb :root, :locals => {:username => @username, :user_arr => @user_arr}, :layout => :main_layout

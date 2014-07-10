@@ -64,6 +64,6 @@ feature "homepage" do
     fill_in "username", :with => "peter"
     fill_in "password", :with => "luke"
     click_button "Log In"
-    expect(page).to have_content("lindsay")
+    expect(page).to have_content("Welcome, peter lindsay")
   end
 end
