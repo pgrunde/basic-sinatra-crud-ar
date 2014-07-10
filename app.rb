@@ -29,6 +29,23 @@ class App < Sinatra::Application
     erb :register, :layout => :main_layout
   end
 
+  post "/delete/" do
+    @username = @database_connection.sql("SELECT username FROM users WHERE id=#{session[:user_id]};").first["username"]
+    @user_arr = @database_connection.sql("SELECT username FROM users;").map {|hash| hash["username"] if hash["username"] != @username}
+    @user_arr.delete(nil)
+    to_delete = params[:delete]
+    if to_delete == @username
+      redirect "/"
+    else
+      begin
+        @database_connection.sql("DELETE FROM users WHERE username = '#{to_delete}'")
+        redirect "/"
+      rescue
+        redirect "/"
+      end
+    end
+  end
+
   post "/register/" do
     if params[:password] == "" && params[:username] == ""
       flash[:login_fail] = "Please enter a username and password."
