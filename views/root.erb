@@ -17,6 +17,12 @@
 <% else %>
 
 <p>Welcome, <%= username %></p>
+<ul>
+<% user_arr.each do |str| %>
+  <li><%= str %></li>
+<% end %>
+</ul>
+
 <a href="/logout/">Logout</a>
 
 <% end %>

@@ -59,4 +59,11 @@ feature "homepage" do
     click_button "Submit"
     expect(page).to have_content("Please enter a username.")
   end
+
+  scenario "see usernames on login" do
+    fill_in "username", :with => "peter"
+    fill_in "password", :with => "luke"
+    click_button "Log In"
+    expect(page).to have_content("lindsay")
+  end
 end
