@@ -1,0 +1,67 @@
+/* ----- =structure ----- */
+
+
+body {
+    background-color:#ccc;
+    font-family: Helvetica, sans-serif;
+    font-size: 110%;
+    padding: 1% 5%;
+
+}
+
+a:link {
+    color:#2358e1;
+    text-decoration: none;
+    font-weight: 600;
+}
+
+a:visited {
+    color:#e1203a;
+    text-decoration: none;
+    font-weight: 600;
+}
+
+a:hover {
+    color:#00b809;
+    text-decoration: none;
+    font-weight: 200;
+}
+
+.wrapper {
+    margin:auto;
+    width:980px;
+    background-color:#fff;
+    text-align: left;
+    line-height: 150%;
+    padding: 1% 5%;
+    border-radius: 5%;
+}
+
+ul {
+    list-style: none;
+}
+
+/* ----- =columns ----- */
+
+.one_half { 	 width:460px; }
+.one_third {	 width:300px; }
+.two_third {	 width:620px; }
+.one_fourth {	 width:220px; }
+.three_fourth { width:700px; }
+.full_column {	 width:940px; }
+
+article {
+    position:relative;
+    margin-left:20px;
+    margin-bottom:16px;
+    float:left;
+}
+
+/* clearfix */
+.clearfix:before,
+.clearfix:after { content: " "; display: table; }
+
+.clearfix:after { clear: both; }
+
+/* * For IE 6/7 only * Include this rule to trigger hasLayout and contain floats. */
+.clearfix { *zoom: 1; }
