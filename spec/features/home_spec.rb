@@ -73,29 +73,33 @@ feature "many users" do
     fill_in "username", :with => "jeff"
     fill_in "password", :with => "luke"
     click_button "Submit"
+    fill_in "username", :with => "peter"
+    fill_in "password", :with => "luke"
+    click_button "Log In"
   end
 
   scenario "see usernames on login" do
-    fill_in "username", :with => "peter"
-    fill_in "password", :with => "luke"
-    click_button "Log In"
-    expect(page).to have_content("Welcome, peter Sort lindsay jeff Logout")
+    expect(page).to have_content("lindsay jeff")
   end
 
   scenario "click sort button to alphabetize users" do
-    fill_in "username", :with => "peter"
-    fill_in "password", :with => "luke"
-    click_button "Log In"
     click_button "Sort"
     expect(page).to have_content("jeff lindsay")
+    select 'desc', from: 'sort'
+    click_button "Sort"
+    expect(page).to have_content("lindsay jeff")
   end
 
   scenario "deletes users successfully" do
-    fill_in "username", :with => "peter"
-    fill_in "password", :with => "luke"
-    click_button "Log In"
     fill_in "delete", :with => "jeff"
     click_button "Delete"
     expect(page).to have_no_content("jeff")
+  end
+
+  scenario "adds fish to fish table" do
+    fill_in "name", :with => "fur-bearing trout"
+    fill_in "wiki", :with => "http://en.wikipedia.org/wiki/Fur-bearing_trout"
+    click_button "Add Fish"
+    expect(page).to have_link("fur-bearing trout", :href => "http://en.wikipedia.org/wiki/Fur-bearing_trout")
   end
 end

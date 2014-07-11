@@ -19,7 +19,11 @@
 <p>Welcome, <%= username %></p>
 
 <form action="/" method="get">
-  <button type="submit" name="sort">Sort</button>
+  <select name="sort">
+    <option value="asc">asc</option>
+    <option value="desc">desc</option>
+  </select>
+  <button type="submit">Sort</button>
 </form>
 
 <ul style="list-style-type: none">
@@ -27,6 +31,23 @@
   <li><%= str %></li>
 <% end %>
 </ul>
+<br>
+
+<form action="/fish/" method="post">
+  <label for="fishname">Fish Name:</label><br>
+  <input id="fishname" name="name" type="text"><br>
+  <label for="wiki_url">Fish Wiki URL:</label><br>
+  <input id="wiki_url" name="wiki" type="text"><br>
+  <button type="submit">Add Fish</button>
+</form>
+<br>
+
+<ul style="list-style-type: none">
+  <% fish_arr.each do |hsh| %>
+    <li><a href="<%= hsh["wiki"] %>"><%= hsh["name"] %></a></li>
+  <% end %>
+</ul>
+<br>
 
 <a href="/logout/">Logout</a>
 <br>
