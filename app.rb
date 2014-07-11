@@ -18,7 +18,7 @@ class App < Sinatra::Application
       @user_arr = @database_connection.sql("SELECT username FROM users;").map {|hash| hash["username"] if hash["username"] != @username}
       @user_arr.delete(nil)
 
-      @fish_arr = @database_connection.sql("SELECT name, wiki FROM fish;")
+      @fish_arr = @database_connection.sql("SELECT name, wiki FROM fish WHERE users_id = '#{session[:user_id]}';")
     end
     if params[:sort] == "asc"
       @user_arr.sort!
