@@ -33,7 +33,6 @@ feature "register" do
     fill_in "username", :with => "peter"
     fill_in "password", :with => "luke"
     click_button "Log In"
-    #save_and_open_page
     expect(page).to have_content("Welcome, peter")
   end
 
@@ -117,4 +116,55 @@ feature "many users" do
     expect(page).to have_link("Salmon of Knowledge", :href => "http://en.wikipedia.org/wiki/Salmon_of_Knowledge")
     expect(page).to have_no_content("fur-bearing trout")
   end
+
+  scenario "click on a user in the list to see their fish" do
+    fill_in "name", :with => "fur-bearing trout"
+    fill_in "wiki", :with => "http://en.wikipedia.org/wiki/Fur-bearing_trout"
+    click_button "Add Fish"
+    click_link "Logout"
+    fill_in "username", :with => "lindsay"
+    fill_in "password", :with => "luke"
+    click_button "Log In"
+    click_link "peter"
+    expect(page).to have_link("fur-bearing trout", :href => "http://en.wikipedia.org/wiki/Fur-bearing_trout")
+  end
+end
+
+feature "complex number of users and fish" do
+  before(:each) do
+    visit "/register/"
+    fill_in "username", :with => "peter"
+    fill_in "password", :with => "luke"
+    click_button "Submit"
+    visit "/register/"
+    fill_in "username", :with => "lindsay"
+    fill_in "password", :with => "luke"
+    click_button "Submit"
+    visit "/register/"
+    fill_in "username", :with => "jeff"
+    fill_in "password", :with => "luke"
+    click_button "Submit"
+    fill_in "username", :with => "peter"
+    fill_in "password", :with => "luke"
+    click_button "Log In"
+    fill_in "name", :with => "fur-bearing trout"
+    fill_in "wiki", :with => "http://en.wikipedia.org/wiki/Fur-bearing_trout"
+    click_button "Add Fish"
+    click_link "Logout"
+    fill_in "username", :with => "lindsay"
+    fill_in "password", :with => "luke"
+    click_button "Log In"
+    fill_in "name", :with => "Salmon of Knowledge"
+    fill_in "wiki", :with => "http://en.wikipedia.org/wiki/Salmon_of_Knowledge"
+    click_button "Add Fish"
+  end
+
+  scenario "click to favorite/unfavorite peter's fish from lindsay's account" do
+    click_link "peter"
+    click_link "fav"
+    expect(page).to have_content("Favorited Fish: fur-bearing trout")
+    click_link "unfav"
+    expect(page).to have_no_content("Favorited Fish: fur-bearing trout")
+  end
+
 end
