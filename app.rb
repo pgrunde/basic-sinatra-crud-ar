@@ -1,6 +1,6 @@
 require "sinatra"
 require "active_record"
-require "./lib/database_connection"
+require "gschool_database_connection"
 
 class App < Sinatra::Application
   def initialize
