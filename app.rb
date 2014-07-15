@@ -1,5 +1,9 @@
 require "sinatra"
+<<<<<<< HEAD
 require "rack-flash"
+=======
+require "active_record"
+>>>>>>> upstream/master
 require "gschool_database_connection"
 
 class App < Sinatra::Application
