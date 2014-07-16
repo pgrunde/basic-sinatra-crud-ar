@@ -1,3 +1,7 @@
+************** MMMM HIDDEN REACHES RANCH DRESSING **************
+http://hidden-reaches-7500.herokuapp.com/
+************** MMMM HIDDEN REACHES RANCH DRESSING **************
+
 # Sinatra with SQL CRUD
 
 We're building the next hot fish favoriting site; fish.ly. Google, Apple, IBM, and anyone who's anyone is entering this market; we have to move fast. For our MVP (Minimum Viable Product) the site needs to let users register, create fish, and favorite other people's fish. If this is shipped by the end of this week, we close a $20m round at a $300m valuation; just enough to feed our families!
