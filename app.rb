@@ -1,9 +1,5 @@
 require "sinatra"
-<<<<<<< HEAD
 require "rack-flash"
-=======
-require "active_record"
->>>>>>> upstream/master
 require "gschool_database_connection"
 
 class App < Sinatra::Application
@@ -17,19 +13,56 @@ class App < Sinatra::Application
 
   get "/" do
     if session[:user_id]
+      p "*"*80
       @username = @database_connection.sql("SELECT username FROM users WHERE id=#{session[:user_id]};").first["username"]
       @user_arr = @database_connection.sql("SELECT username FROM users;").map {|hash| hash["username"] if hash["username"] != @username}
       @user_arr.delete(nil)
 
       @fav_fish_arr = @database_connection.sql(
         "SELECT favorites.id, fish.name as fish_name FROM favorites " +
-        "INNER JOIN users on users.id = favorites.users_id " +
-        "INNER JOIN fish on fish.id = favorites.fish_id " +
-        "WHERE users.id = '#{session[:user_id]}'"
-        ).uniq
+          "INNER JOIN users on users.id = favorites.users_id " +
+          "INNER JOIN fish on fish.id = favorites.fish_id " +
+          "WHERE users.id = '#{session[:user_id]}'"
+      ).uniq
 
       @fish_arr = @database_connection.sql("SELECT name, wiki FROM fish WHERE users_id = '#{session[:user_id]}';")
+
+      if params[:sort] == "asc"
+        @user_arr.sort!
+      elsif params[:sort] == "desc"
+        @user_arr.sort! { |x,y| y <=> x }
+      end
+      if session[:clicked_user_id]
+        @click_user_fish = @database_connection.sql("SELECT id, name, wiki FROM fish WHERE users_id = '#{session[:clicked_user_id]}';")
+      else
+        @click_user_fish = []
+      end
+
+      erb :logged_in, :locals => {:username => @username,
+                                 :user_arr => @user_arr,
+                                 :fish_arr => @fish_arr,
+                                 :click_user_fish => @click_user_fish,
+                                 :fav_fish_arr => @fav_fish_arr}, :layout => :main_layout
+    else
+      erb :logged_out, :layout => :main_layout
     end
+  end
+
+  get "/" do
+    # if session[:user_id]
+    #   @username = @database_connection.sql("SELECT username FROM users WHERE id=#{session[:user_id]};").first["username"]
+    #   @user_arr = @database_connection.sql("SELECT username FROM users;").map {|hash| hash["username"] if hash["username"] != @username}
+    #   @user_arr.delete(nil)
+    #
+    #   @fav_fish_arr = @database_connection.sql(
+    #     "SELECT favorites.id, fish.name as fish_name FROM favorites " +
+    #     "INNER JOIN users on users.id = favorites.users_id " +
+    #     "INNER JOIN fish on fish.id = favorites.fish_id " +
+    #     "WHERE users.id = '#{session[:user_id]}'"
+    #     ).uniq
+    #
+    #   @fish_arr = @database_connection.sql("SELECT name, wiki FROM fish WHERE users_id = '#{session[:user_id]}';")
+    # end
 
     if params[:sort] == "asc"
       @user_arr.sort!
@@ -53,7 +86,7 @@ class App < Sinatra::Application
     erb :register, :layout => :main_layout
   end
 
-  post "/delete/" do
+  post "/delete/:username" do
     @username = @database_connection.sql("SELECT username FROM users WHERE id=#{session[:user_id]};").first["username"]
     @user_arr = @database_connection.sql("SELECT username FROM users;").map {|hash| hash["username"] if hash["username"] != @username}
     @user_arr.delete(nil)
@@ -98,7 +131,7 @@ class App < Sinatra::Application
   end
 
   post "/login/" do
-    user_hashes_arr = @database_connection.sql("select * from users;")
+    user_hashes_arr = @database_connection.sql("select * from users")
     user_hash = user_hashes_arr.detect do |hash|
       params[:username] == hash["username"] && params[:password] == hash["password"]
     end

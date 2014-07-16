@@ -8,16 +8,16 @@ feature "homepage" do
 
   scenario "visit registeration page" do
     click_link "Register"
-    expect(page).to have_content("Username:")
-    expect(page).to have_content("Password:")
-    expect(page).to have_button("Submit")
+    expect(page).to have_content("Username")
+    expect(page).to have_content("Password")
+    expect(page).to have_button("Register")
   end
 
   scenario "register new user" do
     click_link "Register"
     fill_in "username", :with => "peter"
     fill_in "password", :with => "luke"
-    click_button "Submit"
+    click_button "Register"
     expect(page).to have_content("Thank you for registering")
   end
 end
@@ -27,7 +27,7 @@ feature "register" do
     visit "/register/"
     fill_in "username", :with => "peter"
     fill_in "password", :with => "luke"
-    click_button "Submit"
+    click_button "Register"
   end
   scenario "log in user" do
     fill_in "username", :with => "peter"
@@ -46,14 +46,14 @@ feature "register" do
 
   scenario "register validation" do
     click_link "Register"
-    click_button "Submit"
+    click_button "Register"
     expect(page).to have_content("Please enter a username and password.")
     fill_in "username", :with => "peter"
-    click_button "Submit"
+    click_button "Register"
     expect(page).to have_content("Please enter a password.")
     fill_in "username", :with => ""
     fill_in "password", :with => "luke"
-    click_button "Submit"
+    click_button "Register"
     expect(page).to have_content("Please enter a username.")
   end
 end
@@ -63,15 +63,15 @@ feature "many users" do
     visit "/register/"
     fill_in "username", :with => "peter"
     fill_in "password", :with => "luke"
-    click_button "Submit"
+    click_button "Register"
     visit "/register/"
     fill_in "username", :with => "lindsay"
     fill_in "password", :with => "luke"
-    click_button "Submit"
+    click_button "Register"
     visit "/register/"
     fill_in "username", :with => "jeff"
     fill_in "password", :with => "luke"
-    click_button "Submit"
+    click_button "Register"
     fill_in "username", :with => "peter"
     fill_in "password", :with => "luke"
     click_button "Log In"
@@ -135,15 +135,15 @@ feature "complex number of users and fish" do
     visit "/register/"
     fill_in "username", :with => "peter"
     fill_in "password", :with => "luke"
-    click_button "Submit"
+    click_button "Register"
     visit "/register/"
     fill_in "username", :with => "lindsay"
     fill_in "password", :with => "luke"
-    click_button "Submit"
+    click_button "Register"
     visit "/register/"
     fill_in "username", :with => "jeff"
     fill_in "password", :with => "luke"
-    click_button "Submit"
+    click_button "Register"
     fill_in "username", :with => "peter"
     fill_in "password", :with => "luke"
     click_button "Log In"

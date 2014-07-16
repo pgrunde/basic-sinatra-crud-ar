@@ -1,0 +1,46 @@
+<!-- username, user_arr, fish_arr(name, wiki), click_user_fish, fav_fish_arr-->
+<h1>Welcome, <%= username %></h1>
+
+<h2>Users</h2>
+<table id="user_table">
+  <thead>
+  <tr>
+    <th>Username</th>
+    <th>Actions</th>
+  </tr>
+  </thead>
+  <tbody>
+    <% user_arr.each do |user| %>
+      <tr>
+        <td><%= user %></td>
+        <td><a href="/delete/<%= user %>">Delete</a></td>
+      </tr>
+    <% end %>
+      <tr><td>&nbsp;</td><td>&nbsp;</td></tr>
+      <tr><td>&nbsp;</td><td>&nbsp;</td></tr>
+      <tr><td>&nbsp;</td><td>&nbsp;</td></tr>
+      </tbody>
+</table>
+
+<h2>My Fish</h2>
+<table id="user_table">
+  <thead>
+  <tr>
+    <th>Name</th>
+    <th>Actions</th>
+  </tr>
+  </thead>
+  <tbody>
+    <% fish_arr.each do |fish| %>
+      <tr>
+        <td><%= fish["name"] %></td>
+        <td><a href="<%= fish["wiki"] %>">Wikipedia</a></td>
+      </tr>
+    <% end %>
+    <tr><td>&nbsp;</td><td>&nbsp;</td></tr>
+    <tr><td>&nbsp;</td><td>&nbsp;</td></tr>
+    <tr><td>&nbsp;</td><td>&nbsp;</td></tr>
+  </tbody>
+</table>
+<a href="/fish/"><div id="create_fish">Create Fish</div></a>
+<a href="/logout/"><div class="login">Logout</div></a>

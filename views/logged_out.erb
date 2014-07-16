@@ -1,0 +1,21 @@
+<div id="register_notice">
+<% if flash[:register_notice] %>
+  <%= flash[:register_notice] %>
+<% end %>
+</div>
+<a href="/register/">
+  <div id="register">Register</div>
+</a>
+<h2>OR</h2>
+<form action="/login/" method="post">
+  <ul>
+    <li><label for="username">Username:</label></li>
+    <li><input name="username" id="username" type="text"></li>
+    <li><label for="password">Password:</label></li>
+    <li><input name="password" id="password" type="password"></li>
+  </ul>
+  <br>
+  <input type="submit" class="login" value="Log In"/>
+
+</form>
+<br>

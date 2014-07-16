@@ -2,11 +2,15 @@
 
 
 body {
-    background-color:#b7d6ff;
+    background-color:white;
     font-family: Helvetica, sans-serif;
     font-size: 110%;
     padding: 1% 5%;
 
+}
+
+a {
+    text-decoration: none;
 }
 
 a:link {
@@ -29,22 +33,113 @@ a:hover {
 
 .wrapper {
     margin:auto;
-    width:980px;
-    background-color:#fff;
-    text-align: left;
-    line-height: 150%;
-    padding: 1% 5%;
-    border-radius: 3%;
+    width:495px;
 }
 
 ul {
     list-style: none;
+    text-align: left;
+    padding-left: 0;
 }
 
-#right_align {
-    text-align:right;
+li {
+    margin-bottom: 10px;
 }
 
+h2 {
+    margin: 40px;
+    text-align:center;
+}
+form li input {
+    width: 493px;
+}
+
+#register {
+    height: 170px;
+    border:2px solid black;
+    vertical-align: middle;
+    line-height:170px;
+    background-color:#ccc;
+    text-align: center;
+}
+
+.login {
+    height: 70px;
+    width: 495px;
+    border:2px solid black;
+    text-align: center;
+    vertical-align: middle;
+    line-height:70px;
+    background-color:#ccc;
+    margin-top: 30px;
+}
+
+#create_fish {
+    height: 45px;
+    width: 175px;
+    border:2px solid black;
+    text-align: center;
+    vertical-align: middle;
+    line-height:45px;
+    background-color:#ccc;
+    margin-top: 10px;
+    margin-left:316px;
+}
+
+#label {
+    margin: auto;
+}
+
+#reg_container {
+    border: 2px solid #000;
+    /*height: 134px;*/
+}
+
+#user_table {
+    width:495px;
+    border:1px solid black;
+}
+
+#user_table td, tr {
+    border-right:1px solid black;
+}
+
+#user_table th {
+    border-bottom: 1px solid black;
+    background-color: #ccc;
+}
+
+#user_table tr:nth-child(odd) {
+    background-color: #eee;
+}
+
+.border_label {
+    text-align: center;
+    width:95px;
+    margin-top:-10px;
+    margin-left:5px;
+    background-color: #fff;
+}
+
+table {
+    margin: auto;
+    margin-bottom: 10px;
+}
+
+tr input {
+    width:300px;
+    margin:10px;
+}
+
+.notice {
+    color: red;
+    margin-left: 20px;
+}
+
+#register_notice {
+    color: green;
+    margin-bottom: 20px;
+}
 /* ----- =columns ----- */
 
 .one_half { 	 width:460px; }
