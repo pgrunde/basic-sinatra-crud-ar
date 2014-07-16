@@ -167,10 +167,4 @@ class App < Sinatra::Application
     redirect "/"
   end
 
-  get "/:un" do
-    id_hash = @database_connection.sql("SELECT id FROM users WHERE username = '#{params[:un]}'")
-    session[:clicked_user_id] = id_hash.first["id"]
-    redirect "/"
-  end
-
 end
