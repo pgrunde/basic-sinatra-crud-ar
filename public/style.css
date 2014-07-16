@@ -100,7 +100,7 @@ form li input {
     border:1px solid black;
 }
 
-#user_table td, tr {
+#user_table td, #user_table tr {
     border-right:1px solid black;
 }
 
