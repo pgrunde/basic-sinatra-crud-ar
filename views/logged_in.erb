@@ -10,16 +10,29 @@
   </tr>
   </thead>
   <tbody>
-    <% user_arr.each do |user| %>
-      <tr>
-        <td><%= user %></td>
-        <td><a href="/delete/<%= user %>">Delete</a></td>
-      </tr>
-    <% end %>
-      <tr><td>&nbsp;</td><td>&nbsp;</td></tr>
-      <tr><td>&nbsp;</td><td>&nbsp;</td></tr>
-      <tr><td>&nbsp;</td><td>&nbsp;</td></tr>
-      </tbody>
+  <% user_arr.each do |user| %>
+    <tr>
+      <td><%= user %></td>
+      <td>
+        <form method="post" action="/delete/<%= user %>">
+        <input type="hidden" name="_method" value="delete"/>
+          <input type="submit" class="no_style" value="Delete"/>
+          </form>
+    </tr>
+  <% end %>
+  <tr>
+    <td>&nbsp;</td>
+    <td>&nbsp;</td>
+  </tr>
+  <tr>
+    <td>&nbsp;</td>
+    <td>&nbsp;</td>
+  </tr>
+  <tr>
+    <td>&nbsp;</td>
+    <td>&nbsp;</td>
+  </tr>
+  </tbody>
 </table>
 
 <h2>My Fish</h2>
@@ -31,16 +44,29 @@
   </tr>
   </thead>
   <tbody>
-    <% fish_arr.each do |fish| %>
-      <tr>
-        <td><%= fish["name"] %></td>
-        <td><a href="<%= fish["wiki"] %>">Wikipedia</a></td>
-      </tr>
-    <% end %>
-    <tr><td>&nbsp;</td><td>&nbsp;</td></tr>
-    <tr><td>&nbsp;</td><td>&nbsp;</td></tr>
-    <tr><td>&nbsp;</td><td>&nbsp;</td></tr>
+  <% fish_arr.each do |fish| %>
+    <tr>
+      <td><%= fish["name"] %></td>
+      <td><a href="<%= fish["wiki"] %>">Wikipedia</a></td>
+    </tr>
+  <% end %>
+  <tr>
+    <td>&nbsp;</td>
+    <td>&nbsp;</td>
+  </tr>
+  <tr>
+    <td>&nbsp;</td>
+    <td>&nbsp;</td>
+  </tr>
+  <tr>
+    <td>&nbsp;</td>
+    <td>&nbsp;</td>
+  </tr>
   </tbody>
 </table>
-<a href="/fish/"><div id="create_fish">Create Fish</div></a>
-<a href="/logout/"><div class="login">Logout</div></a>
+<a href="/fish/">
+  <div id="create_fish">Create Fish</div>
+</a>
+<a href="/logout/">
+  <div class="login">Logout</div>
+</a>
