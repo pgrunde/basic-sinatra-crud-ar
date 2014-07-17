@@ -51,6 +51,10 @@ class Fishly
     @database_connection.sql("INSERT INTO fish (users_id, name, wiki) VALUES (#{users_id},'#{name}','#{wiki}')")
   end
 
+  def delete_fish(id)
+    @database_connection.sql("DELETE FROM fish WHERE id = '#{id}'")
+  end
+
   # FAVORITES METHODS
 
   def insert_favorites(users_id,fish_id)

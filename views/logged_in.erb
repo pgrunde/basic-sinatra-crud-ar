@@ -77,7 +77,13 @@
   <% fish_arr.each do |fish| %>
     <tr>
       <td><%= fish["name"] %></td>
-      <td><a href="<%= fish["wiki"] %>">Wikipedia</a></td>
+      <td>
+        <a href="<%= fish["wiki"] %>">Wikipedia</a>
+        <form method="post" action="/fish_delete/<%= fish["id"] %>">
+          <input type="hidden" name="_method" value="delete"/>
+          <button type="submit" class="no_style" id="delete_<%= fish["name"] %>">Delete</button>
+        </form>
+      </td>
     </tr>
   <% end %>
   <tr>

@@ -176,4 +176,10 @@ feature "complex number of users and fish" do
     expect(page).to have_content("fav")
   end
 
+  scenario "delete my own fish" do
+    # delete salmon
+    click_button "delete_Salmon of Knowledge"
+    expect(page).to_not have_content("Salmon of Knowledge")
+  end
+
 end

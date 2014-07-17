@@ -56,6 +56,11 @@ class App < Sinatra::Application
     redirect "/"
   end
 
+  delete "/fish_delete/:id" do
+    @db.delete_fish(params[:id])
+    redirect "/"
+  end
+
   post "/fish/" do
     unless session[:user_id]
       redirect "/"
