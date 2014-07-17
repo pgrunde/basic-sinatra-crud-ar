@@ -1,0 +1,19 @@
+
+<h1>Search for Fish</h1>
+<form action="/search" method="post">
+  <div id="reg_container">
+    <table>
+      <tr>
+        <td><label for="fish_name">Name</label></td>
+        <td><input name="fish_name" id="fish_name" type="text"/></td>
+      </tr>
+    </table>
+  </div>
+  <button class="login" type="submit">Search</button>
+</form>
+<ul>
+
+<% found_fish.each do |fish| %>
+  <li><%= fish["name"] %></li>
+<% end %>
+</ul>

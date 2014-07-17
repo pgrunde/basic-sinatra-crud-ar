@@ -51,6 +51,15 @@ class App < Sinatra::Application
     erb :register, :layout => :main_layout
   end
 
+  get "/search" do
+    erb :search, :locals => {:found_fish => []}, :layout => :main_layout
+  end
+
+  post "/search" do
+    found_fish = @db.search_fish(params[:fish_name])
+    erb :search, :locals => {:found_fish => found_fish}, :layout => :main_layout
+  end
+
   delete "/delete/:username" do
     @db.user_delete(params[:username])
     redirect "/"

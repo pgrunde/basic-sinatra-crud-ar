@@ -43,6 +43,10 @@ class Fishly
     ).uniq
   end
 
+  def search_fish(name)
+    @database_connection.sql("select * from fish where name LIKE '%#{name}%'")
+  end
+
   def fish_arr(id)
     @database_connection.sql("SELECT * FROM fish WHERE users_id = '#{id}'")
   end

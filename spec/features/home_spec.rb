@@ -177,9 +177,30 @@ feature "complex number of users and fish" do
   end
 
   scenario "delete my own fish" do
-    # delete salmon
     click_button "delete_Salmon of Knowledge"
     expect(page).to_not have_content("Salmon of Knowledge")
+  end
+
+  scenario "search fish" do
+
+    click_link("Create Fish")
+    fill_in "name", :with => "brown trout"
+    fill_in "wiki", :with => "http://en.wikipedia.org/wiki/Brown_trout"
+    click_button "Create"
+
+    click_link("Create Fish")
+    fill_in "name", :with => "rainbow trout"
+    fill_in "wiki", :with => "http://en.wikipedia.org/wiki/Rainbow_trout"
+    click_button "Create"
+
+    click_link("Search Fish")
+    fill_in("fish_name", :with => "trout")
+    click_button("Search")
+    expect(page).to have_content("fur-bearing trout")
+    expect(page).to have_content("rainbow trout")
+    expect(page).to have_content("brown trout")
+    expect(page).to_not have_content("Salmon of Knowledge")
+
   end
 
 end
