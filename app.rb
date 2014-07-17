@@ -1,6 +1,7 @@
 require "sinatra"
 require "rack-flash"
 require "gschool_database_connection"
+require_relative "./lib/fishly"
 
 class App < Sinatra::Application
   enable :sessions
@@ -8,79 +9,39 @@ class App < Sinatra::Application
 
   def initialize
     super
-    @database_connection = GschoolDatabaseConnection::DatabaseConnection.establish(ENV["RACK_ENV"])
+    @db = Fishly.new
   end
 
   get "/" do
     if session[:user_id]
-      p "*"*80
-      @username = @database_connection.sql("SELECT username FROM users WHERE id=#{session[:user_id]};").first["username"]
-      @user_arr = @database_connection.sql("SELECT username FROM users;").map {|hash| hash["username"] if hash["username"] != @username}
-      @user_arr.delete(nil)
+      username = @db.get_user(session[:user_id])
 
-      @fav_fish_arr = @database_connection.sql(
-        "SELECT favorites.id, fish.name as fish_name FROM favorites " +
-          "INNER JOIN users on users.id = favorites.users_id " +
-          "INNER JOIN fish on fish.id = favorites.fish_id " +
-          "WHERE users.id = '#{session[:user_id]}'"
-      ).uniq
+      users = @db.get_users(session[:user_id])
 
-      @fish_arr = @database_connection.sql("SELECT name, wiki FROM fish WHERE users_id = '#{session[:user_id]}';")
+      fav_fish_arr = @db.fav_fish_arr(session[:user_id])
+
+      fish_arr = @db.fish_arr(session[:user_id])
 
       if params[:sort] == "asc"
-        @user_arr.sort!
+        users.sort_by! {|user| user["username"]}
       elsif params[:sort] == "desc"
-        @user_arr.sort! { |x,y| y <=> x }
+        users.sort_by! {|user| user["username"]}.reverse!
       end
       if session[:clicked_user_id]
-        @click_user_fish = @database_connection.sql("SELECT id, name, wiki FROM fish WHERE users_id = '#{session[:clicked_user_id]}';")
+        click_user_fish = @db.fish_arr(session[:clicked_user_id])
       else
-        @click_user_fish = []
+        click_user_fish = []
       end
 
-      erb :logged_in, :locals => {:username => @username,
-                                 :user_arr => @user_arr,
-                                 :fish_arr => @fish_arr,
-                                 :click_user_fish => @click_user_fish,
-                                 :fav_fish_arr => @fav_fish_arr}, :layout => :main_layout
+      erb :logged_in, :locals => {:username => username,
+                                  :user_arr => users,
+                                  :fish_arr => fish_arr,
+                                  :click_user_fish => click_user_fish,
+                                  :fav_fish_arr => fav_fish_arr}, :layout => :main_layout
     else
       erb :logged_out, :layout => :main_layout
     end
   end
-
-  # get "/" do
-  #   if session[:user_id]
-  #     @username = @database_connection.sql("SELECT username FROM users WHERE id=#{session[:user_id]};").first["username"]
-  #     @user_arr = @database_connection.sql("SELECT username FROM users;").map {|hash| hash["username"] if hash["username"] != @username}
-  #     @user_arr.delete(nil)
-  #
-  #     @fav_fish_arr = @database_connection.sql(
-  #       "SELECT favorites.id, fish.name as fish_name FROM favorites " +
-  #       "INNER JOIN users on users.id = favorites.users_id " +
-  #       "INNER JOIN fish on fish.id = favorites.fish_id " +
-  #       "WHERE users.id = '#{session[:user_id]}'"
-  #       ).uniq
-  #
-  #     @fish_arr = @database_connection.sql("SELECT name, wiki FROM fish WHERE users_id = '#{session[:user_id]}';")
-  #   end
-  #
-  #   if params[:sort] == "asc"
-  #     @user_arr.sort!
-  #   elsif params[:sort] == "desc"
-  #     @user_arr.sort! { |x,y| y <=> x }
-  #   end
-  #   if session[:clicked_user_id]
-  #     @click_user_fish = @database_connection.sql("SELECT id, name, wiki FROM fish WHERE users_id = '#{session[:clicked_user_id]}';")
-  #   else
-  #     @click_user_fish = []
-  #   end
-  #
-  #   erb :root, :locals => {:username => @username,
-  #                          :user_arr => @user_arr,
-  #                          :fish_arr => @fish_arr,
-  #                          :click_user_fish => @click_user_fish,
-  #                          :fav_fish_arr => @fav_fish_arr}, :layout => :main_layout
-  # end
 
   get "/fish/" do
     erb :create_fish, :layout => :main_layout
@@ -91,7 +52,7 @@ class App < Sinatra::Application
   end
 
   delete "/delete/:username" do
-    @database_connection.sql("DELETE FROM users WHERE username = '#{params[:username]}'")
+    @db.user_delete(params[:username])
     redirect "/"
   end
 
@@ -111,7 +72,7 @@ class App < Sinatra::Application
       redirect "/fish/"
     end
 
-    @database_connection.sql("INSERT INTO fish (users_id, name, wiki) VALUES (#{session[:user_id]},'#{params[:name]}','#{params[:wiki]}')")
+    @db.insert_fish(session[:user_id], params[:name], params[:wiki])
     redirect "/"
 
   end
@@ -126,20 +87,18 @@ class App < Sinatra::Application
     elsif params[:username] == ""
       flash[:login_fail] = "Please enter a username."
       redirect "/register/"
-    end
-
-    begin
-      @database_connection.sql("INSERT INTO users (username, password) VALUES ('#{params[:username]}', '#{params[:password]}')")
-      flash[:register_notice] = "Thank you for registering"
-      redirect "/"
-    rescue
+    elsif @db.reg_check(params[:username])
       flash[:login_fail] = "That name is taken."
       redirect "/register/"
+    else
+      @db.insert_user(params[:username], params[:password])
+      flash[:register_notice] = "Thank you for registering"
+      redirect "/"
     end
   end
 
   post "/login/" do
-    user_hashes_arr = @database_connection.sql("select * from users")
+    user_hashes_arr = @db.get_all_users
     user_hash = user_hashes_arr.detect do |hash|
       params[:username] == hash["username"] && params[:password] == hash["password"]
     end
@@ -153,17 +112,22 @@ class App < Sinatra::Application
   end
 
   get "/favorites/:id" do
-    @database_connection.sql("INSERT INTO favorites (users_id, fish_id) VALUES ('#{session[:user_id]}','#{params[:id]}')")
+    @db.insert_favorites(session[:user_id], params[:id])
     redirect "/"
   end
 
   get "/unfavorite/:id" do
-    @database_connection.sql("DELETE FROM favorites WHERE id = '#{params[:id]}'")
+    @db.delete_favorites(params[:id])
     redirect "/"
   end
 
   get "/logout/" do
     session[:user_id] = nil
+    redirect "/"
+  end
+
+  get "/:click_id" do
+    session[:clicked_user_id] = params[:click_id]
     redirect "/"
   end
 

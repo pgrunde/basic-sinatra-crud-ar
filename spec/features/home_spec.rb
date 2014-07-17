@@ -55,6 +55,10 @@ feature "register" do
     fill_in "password", :with => "luke"
     click_button "Register"
     expect(page).to have_content("Please enter a username.")
+    fill_in "username", :with => "peter"
+    fill_in "password", :with => "luke"
+    click_button "Register"
+    expect(page).to have_content("That name is taken.")
   end
 end
 
@@ -78,49 +82,52 @@ feature "many users" do
   end
 
   scenario "see usernames on login" do
-    expect(page).to have_content("lindsay jeff")
+    expect(page).to have_content("lindsay Delete jeff")
   end
 
   scenario "click sort button to alphabetize users" do
     click_button "Sort"
-    expect(page).to have_content("jeff lindsay")
+    expect(page).to have_content("jeff Delete lindsay")
     select 'desc', from: 'sort'
     click_button "Sort"
-    expect(page).to have_content("lindsay jeff")
+    expect(page).to have_content("lindsay Delete jeff")
   end
 
   scenario "deletes users successfully" do
-    fill_in "delete", :with => "jeff"
-    click_button "Delete"
+    click_button("delete_jeff")
     expect(page).to have_no_content("jeff")
   end
 
   scenario "adds fish to fish table" do
+    click_link("Create Fish")
     fill_in "name", :with => "fur-bearing trout"
     fill_in "wiki", :with => "http://en.wikipedia.org/wiki/Fur-bearing_trout"
-    click_button "Add Fish"
-    expect(page).to have_link("fur-bearing trout", :href => "http://en.wikipedia.org/wiki/Fur-bearing_trout")
+    click_button "Create"
+    expect(page).to have_link("Wiki", :href => "http://en.wikipedia.org/wiki/Fur-bearing_trout")
   end
 
   scenario "user only sees user fish" do
+    click_link("Create Fish")
     fill_in "name", :with => "fur-bearing trout"
     fill_in "wiki", :with => "http://en.wikipedia.org/wiki/Fur-bearing_trout"
-    click_button "Add Fish"
+    click_button "Create"
     click_link "Logout"
     fill_in "username", :with => "lindsay"
     fill_in "password", :with => "luke"
     click_button "Log In"
+    click_link("Create Fish")
     fill_in "name", :with => "Salmon of Knowledge"
     fill_in "wiki", :with => "http://en.wikipedia.org/wiki/Salmon_of_Knowledge"
-    click_button "Add Fish"
-    expect(page).to have_link("Salmon of Knowledge", :href => "http://en.wikipedia.org/wiki/Salmon_of_Knowledge")
+    click_button "Create"
+    expect(page).to have_link("Wiki", :href => "http://en.wikipedia.org/wiki/Salmon_of_Knowledge")
     expect(page).to have_no_content("fur-bearing trout")
   end
 
   scenario "click on a user in the list to see their fish" do
+    click_link("Create Fish")
     fill_in "name", :with => "fur-bearing trout"
     fill_in "wiki", :with => "http://en.wikipedia.org/wiki/Fur-bearing_trout"
-    click_button "Add Fish"
+    click_button "Create"
     click_link "Logout"
     fill_in "username", :with => "lindsay"
     fill_in "password", :with => "luke"

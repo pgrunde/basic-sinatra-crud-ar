@@ -5,19 +5,38 @@
 <table id="user_table">
   <thead>
   <tr>
-    <th>Username</th>
+    <th>Username
+      <div>
+        <form action="/" method="get">
+          <select name="sort">
+            <option value="asc">asc</option>
+            <option value="desc">desc</option>
+          </select>
+          <button type="submit">Sort</button>
+        </form>
+      </div>
+    </th>
     <th>Actions</th>
   </tr>
   </thead>
   <tbody>
   <% user_arr.each do |user| %>
     <tr>
-      <td><%= user %></td>
       <td>
-        <form method="post" action="/delete/<%= user %>">
-        <input type="hidden" name="_method" value="delete"/>
-          <input type="submit" class="no_style" value="Delete"/>
-          </form>
+        <a href="/<%= user["id"] %>"><%= user["username"] %></a>
+        <% if user["id"] == session[:clicked_user_id] %>
+          <ul>
+            <% click_user_fish.each do |fish| %>
+              <li>:: <a href="<%= fish["wiki"] %>"><%= fish["name"] %></a></li>
+            <% end %>
+          </ul>
+        <% end %>
+      </td>
+      <td>
+        <form method="post" action="/delete/<%= user["username"] %>">
+          <input type="hidden" name="_method" value="delete"/>
+          <button type="submit" class="no_style" id="delete_<%= user["username"] %>">Delete</button>
+        </form>
     </tr>
   <% end %>
   <tr>
