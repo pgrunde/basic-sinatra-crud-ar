@@ -154,24 +154,26 @@ feature "complex number of users and fish" do
     fill_in "username", :with => "peter"
     fill_in "password", :with => "luke"
     click_button "Log In"
+    click_link "Create Fish"
     fill_in "name", :with => "fur-bearing trout"
     fill_in "wiki", :with => "http://en.wikipedia.org/wiki/Fur-bearing_trout"
-    click_button "Add Fish"
+    click_button "Create"
     click_link "Logout"
     fill_in "username", :with => "lindsay"
     fill_in "password", :with => "luke"
     click_button "Log In"
+    click_link("Create Fish")
     fill_in "name", :with => "Salmon of Knowledge"
     fill_in "wiki", :with => "http://en.wikipedia.org/wiki/Salmon_of_Knowledge"
-    click_button "Add Fish"
+    click_button "Create"
   end
 
   scenario "click to favorite/unfavorite peter's fish from lindsay's account" do
     click_link "peter"
     click_link "fav"
-    expect(page).to have_content("Favorited Fish: fur-bearing trout")
-    click_link "unfav"
-    expect(page).to have_no_content("Favorited Fish: fur-bearing trout")
+    expect(page).to have_content("unfav")
+    click_button "unfav_fur-bearing trout"
+    expect(page).to have_content("fav")
   end
 
 end

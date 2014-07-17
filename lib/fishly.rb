@@ -36,7 +36,7 @@ class Fishly
 
   def fav_fish_arr(id)
     @database_connection.sql(
-      "SELECT favorites.id, fish.name as fish_name FROM favorites " +
+      "SELECT fish.name as fish_name FROM favorites " +
         "INNER JOIN users on users.id = favorites.users_id " +
         "INNER JOIN fish on fish.id = favorites.fish_id " +
         "WHERE users.id = #{id}"
@@ -57,8 +57,8 @@ class Fishly
     @database_connection.sql("INSERT INTO favorites (users_id, fish_id) VALUES ('#{users_id}','#{fish_id}')")
   end
 
-  def delete_favorites(fish_id)
-    @database_connection.sql("DELETE FROM favorites WHERE id = '#{fish_id}'")
+  def delete_favorites(users_id,fish_id)
+    @database_connection.sql("DELETE FROM favorites WHERE fish_id = '#{fish_id}' and users_id = '#{users_id}'")
   end
 
 end

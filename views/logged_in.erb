@@ -27,7 +27,18 @@
         <% if user["id"] == session[:clicked_user_id] %>
           <ul>
             <% click_user_fish.each do |fish| %>
-              <li>:: <a href="<%= fish["wiki"] %>"><%= fish["name"] %></a></li>
+              <li>:: <a href="<%= fish["wiki"] %>"><%= fish["name"] %></a>
+
+              <% if fav_fish_arr.include? ({"fish_name" => fish["name"]}) %>
+                  <form method="post" action="/unfav/<%= fish["id"] %>">
+                    <input type="hidden" name="_method" value="delete"/>
+                    <button type="submit" class="no_style" id="unfav_<%= fish["name"] %>">unfav</button>
+                  </form>
+              <% else %>
+                  <a href="/fav/<%= fish["id"] %>">fav</a>
+              <% end%>
+
+              </li>
             <% end %>
           </ul>
         <% end %>

@@ -111,13 +111,13 @@ class App < Sinatra::Application
     redirect "/"
   end
 
-  get "/favorites/:id" do
+  get "/fav/:id" do
     @db.insert_favorites(session[:user_id], params[:id])
     redirect "/"
   end
 
-  get "/unfavorite/:id" do
-    @db.delete_favorites(params[:id])
+  delete "/unfav/:id" do
+    @db.delete_favorites(session[:user_id],params[:id])
     redirect "/"
   end
 
